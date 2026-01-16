@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven_3'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'java -version'
+                sh 'mvn -version'
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Run All Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'All tests executed successfully.'
+        }
+        failure {
+            echo 'Some tests failed.'
+        }
+    }
+}
